@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NermaiPar — VerseHack 2026 Round 2</title>
+<style>
+  @page { size: A4; margin: 16mm 16mm 18mm; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1e293b; font-size: 11.5pt; line-height: 1.45; }
+  h1 { font-family: "Segoe UI", sans-serif; font-size: 26pt; margin: 0; letter-spacing: -0.03em; color: #0f172a; }
+  .tag { font-family: "Segoe UI", sans-serif; color: #0f766e; font-size: 12pt; margin: 4px 0 8px; }
+  .meta { font-family: "Segoe UI", sans-serif; color: #475569; font-size: 10.5pt; }
+  hr { border: 0; border-top: 2px solid #0f766e; margin: 12px 0 16px; }
+  h2 { font-family: "Segoe UI", sans-serif; font-size: 13.5pt; color: #0f172a; margin: 16px 0 6px; }
+  p { margin: 0 0 8px; }
+  ul { margin: 0 0 8px; padding-left: 18px; }
+  li { margin: 0 0 4px; }
+  footer { font-family: "Segoe UI", sans-serif; font-size: 9pt; color: #64748b; margin-top: 18px; }
+</style>
+</head>
+<body>
+  <h1>NermaiPar</h1>
+  <p class="tag">An omnipresent circuit breaker for digital misinformation</p>
+  <p class="meta">VerseHack 2026 &nbsp;|&nbsp; Round 2 prototype documentation<br>Team Nermai TOPpers &nbsp;|&nbsp; 12 November 2026</p>
+  <hr>
+
+  <h2>1. Project overview</h2>
+  <p>NermaiPar helps a person pause a suspicious forward before they share it. It reads the message, says whether the claim is true, false, misleading, or unverified, names the trick, and offers a short reply that can be sent back without starting a fight.</p>
+  <p>The live checker is a Telegram bot. The website shows the full path a family would use: Detect, Explain, Respond, and Train. The website also walks through how the same check would look on WhatsApp and on a basic phone. Those two views are demonstrations. They are not connected to live WhatsApp or SMS networks.</p>
+
+  <h2>2. Problem statement</h2>
+  <p>Scary and urgent messages spread in family groups because they are easy to forward and hard to check in the moment. A health cure, a bank warning, or a half-true news story can move through dozens of chats before anyone opens a trusted source. People also avoid correcting an elder because the correction itself starts an argument.</p>
+  <p>The problem is not a lack of facts somewhere on the internet. The problem is the few seconds between receiving a forward and tapping the arrow. NermaiPar is built for that pause.</p>
+
+  <h2>3. Proposed solution and objectives</h2>
+  <ul>
+    <li>Give a verdict in plain language: True, False, Misleading, or Unverified.</li>
+    <li>Answer a direct question, not only a pasted forward.</li>
+    <li>Fix obvious spelling so a messy message is still judged on its meaning.</li>
+    <li>Show the manipulation trick and a polite reply the user can paste back.</li>
+    <li>Keep the check where the message already is, starting with Telegram.</li>
+    <li>Teach the pattern on the website so the next forward is easier to spot.</li>
+  </ul>
+
+  <h2>4. How it works</h2>
+  <p>1. The user sends a message to the Telegram bot, or pastes a sample on the website.</p>
+  <p>2. Greetings and messages about how to use the bot are answered as conversation. They are not stamped as hoaxes.</p>
+  <p>3. For a claim, the bot fixes a short list of common typos and searches current news headlines.</p>
+  <p>4. Those notes and the message go to Gemini, which returns a spoken answer, a verdict, the trick, and a paste-back line.</p>
+  <p>5. The bot first says it is checking, then replaces that line with the answer and adds an emoji reaction.</p>
+  <p>6. If the model returns nothing, a small saved list still blocks known health scams, fake bank links, and the claim that a currency note contains a tracking chip.</p>
+  <p>A weather question skips the hoax stamp and uses a live forecast instead.</p>
+
+  <h2>5. Technologies and tools</h2>
+  <ul>
+    <li>Website: HTML, CSS, and JavaScript. No build step. It can be installed as a web app, and the shell works offline after the first load.</li>
+    <li>Bot: Python 3.11 on Telegram.</li>
+    <li>Verdicts: Gemini API. OpenRouter is wired as a fallback when a key is present.</li>
+    <li>Fresh context: a live news search is attached to each claim before the model answers. Weather uses the Open-Meteo forecast.</li>
+    <li>AI assistance was used while building the prototype. The team can explain each part of the check.</li>
+  </ul>
+
+  <h2>6. Key features</h2>
+  <ul>
+    <li>True, False, Misleading, and Unverified, each with a sentence a person can read aloud.</li>
+    <li>Spelling cleanup before the verdict, so typos do not hide the claim.</li>
+    <li>An emoji reaction on the user's message.</li>
+    <li>A reply written for a family chat, not for an argument.</li>
+    <li>Website flow: Detect, Explain, Respond, and a short training quiz.</li>
+    <li>Sample claims for a health scam, a bank-link scam, and a real space-agency launch.</li>
+  </ul>
+
+  <h2>7. What a judge can try</h2>
+  <p>On Telegram, open the NermaiPar bot and send: "Did Nvidia get hacked this month?" The expected answer is True, with the October 2026 Brev cloud incident and no confirmed misuse. Then send a version that says the hack was today and that GPUs are exploding. The expected stamp is Misleading: the breach report is real, and the exploding-GPU part is not.</p>
+  <p>On the website, choose Health scam and press Analyze. Open Explain, then Respond, and copy the reply. The interface used for the demo is English.</p>
+
+  <h2>8. Current limitations</h2>
+  <ul>
+    <li>A verdict can be wrong. The product tells people to confirm important claims with the original source.</li>
+    <li>News search can return a related headline that is not the same story. The model is told to ignore notes about a different story.</li>
+    <li>Gemini's built-in Google Search is over the free quota, so search uses a news feed instead.</li>
+    <li>WhatsApp and SMS in the website are simulated channels.</li>
+    <li>The bot has to be running for Telegram checks. It is not a 24-hour hosted service yet.</li>
+    <li>Do not send passwords, one-time codes, or card numbers. The bot is not a bank.</li>
+  </ul>
+
+  <h2>9. Future scope</h2>
+  <ul>
+    <li>Connect a real WhatsApp path so a forward never has to be copied into another app.</li>
+    <li>Put a source link on every verdict.</li>
+    <li>Cache the most common hoaxes for slow or offline connections.</li>
+    <li>Keep one public demo running through the judging window.</li>
+  </ul>
+
+  <h2>10. Submission note</h2>
+  <p>This document, the source repository, the prototype link, and a 2 to 5 minute English demonstration video are the Round 2 materials for team Nermai TOPpers. The prototype is a working minimum version, not a finished commercial product. Deadline: 15 November 2026, 11:59 PM IST.</p>
+  <footer>NermaiPar &nbsp;|&nbsp; VerseHack 2026 Round 2 &nbsp;|&nbsp; Team Nermai TOPpers</footer>
+</body>
+</html>
